@@ -8,6 +8,7 @@
 import Foundation
 
 struct Article: Decodable {
-    let articles: News
+    // MARK: - Fixed: There shoud be an array property. 
+    let articles: [News]
 }
 

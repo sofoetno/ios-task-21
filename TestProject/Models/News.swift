@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct News {
+// MARK: - Fixed: stuct should confirm to protocol of "decodeble".
+struct News: Decodable {
     let authors: String?
     let title: String?
     let urlToImage: String?

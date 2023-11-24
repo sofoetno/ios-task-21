@@ -9,13 +9,15 @@ import Foundation
 
 final class NetworkManager {
     
-    let shared = NetworkManager()
+    // MARK: - Fixed: shared property should be static.
+    static let shared = NetworkManager()
     
     public init() {}
     
     func get<T: Decodable>(url: String, completion: @escaping ((Result<T, Error>) -> Void)) {
         
-        guard let url = URL(string: "") else { return }
+        // MARK: - Fixed: The URL argument was an empty string.
+        guard let url = URL(string: url) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             
@@ -31,7 +33,7 @@ final class NetworkManager {
             } catch let error {
                 completion(.failure(error))
             }
-        }
+        }.resume() // MARK: - Fixed: there was no resume() method invokation.
     }
 }
 

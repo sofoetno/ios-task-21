@@ -8,7 +8,8 @@
 import UIKit
 import Kingfisher
 
-final class NewsTableViewCell: UICollectionViewCell {
+// MARK: - Fixed: NewsTableViewCell should be subclass of UITableViewCell. It was UICollectionViewCell subclass.
+final class NewsTableViewCell: UITableViewCell {
 
     // MARK: - UI Elements
     private var newsImageView: UIImageView = {
@@ -26,7 +27,8 @@ final class NewsTableViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.isHidden = true
+        // MARK: - Fixed: label was hidden.
+//        label.isHidden = true
         return label
     }()
 
@@ -71,16 +73,19 @@ final class NewsTableViewCell: UICollectionViewCell {
     }
 
     private func setupConstraints() {
+        // MARK: - Fixed: contrains.
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            mainStackView.leadingAnchor.constraint(equalTo: contentView.rightAnchor, constant: 10),
-            mainStackView.trailingAnchor.constraint(equalTo: contentView.leftAnchor, constant: -10),
-            mainStackView.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: -20)
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
 
     // MARK: - Configure
-    private func configure(with news: News) {
+    
+    // MARK: - Fixed: configure func should not be private. Before it was private.
+        func configure(with news: News) {
         let url = URL(string: news.urlToImage ?? "")
         newsImageView.kf.setImage(with: url)
         newsTitleLabel.text = news.title

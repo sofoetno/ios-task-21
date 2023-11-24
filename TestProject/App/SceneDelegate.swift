@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: UIViewController())
+        
+        // MARK: - Fixed: we needed specialy our VC(NewsViewController) and there was general VC(UIViewController) before.
+        window?.rootViewController = UINavigationController(rootViewController: NewsViewController())
         window?.makeKeyAndVisible()
     }
 
@@ -53,10 +55,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
-final class DefaultNewViewModel: NewsViewModel {
-    var delegate: NewsViewModelDelegate?
-    
-    func viewDidLoad() {
-        print("find me")
-    }
-}
+// MARK: - Fixed: we donn't need this part of code. 
+//final class DefaultNewViewModel: NewsViewModel {
+//    var delegate: NewsViewModelDelegate?
+//    
+//    func viewDidLoad() {
+//        print("find me")
+//    }
+//}

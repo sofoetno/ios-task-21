@@ -10,23 +10,33 @@ import UIKit
 final class NewsViewController: UIViewController {
     
     // MARK: - Properties
-    private var tableView: UITableView = {
+    
+    // MARK: - there need "lazy" to use "self".
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
+        
+        // MARK: - Fixed: there was a typo in "NewsCell"
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
     }()
     
     private var news = [News]()
-    private var viewModel: NewsViewModel = DefaultNewViewModel()
+    
+    // MARK: - Fixed: there was incorect class "DefaultNewViewModel"
+    private var viewModel: NewsViewModel = DefaultNewsViewModel()
 
     // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // MARK: - Fixed: assigning delegate was missing.
+        viewModel.delegate = self
 
         setupTableView()
         viewModel.viewDidLoad()
+        
     }
     
     // MARK: - Setup TableView
@@ -46,14 +56,17 @@ final class NewsViewController: UIViewController {
 // MARK: - TableViewDataSource
 extension NewsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        .zero
+        // MARK: - Fixed: there was static number and now it's dynamic count.
+        news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as? NewsTableViewCell else {
             fatalError("Could not dequeue NewsCell")
         }
-        cell.configure(with: news[indexPath.row + 1])
+        
+        // MARK: - Fixed: out of range index.
+        cell.configure(with: news[indexPath.row])
         return cell
     }
 }
@@ -61,7 +74,9 @@ extension NewsViewController: UITableViewDataSource {
 // MARK: - TableViewDelegate
 extension NewsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        .zero
+        
+        // MARK: - Fixed: cell's hight should not be zero.
+        250
     }
 }
 
@@ -69,7 +84,9 @@ extension NewsViewController: UITableViewDelegate {
 extension NewsViewController: NewsViewModelDelegate {
     func newsFetched(_ news: [News]) {
         self.news = news
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     func showError(_ error: Error) {

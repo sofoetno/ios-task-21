@@ -20,7 +20,9 @@ protocol NewsViewModel {
 final class DefaultNewsViewModel: NewsViewModel {
     
     // MARK: - Properties
-    private let newsAPI = "https://newsapi.org/v2/everything?q=tesla&from=2021-11-11&sortBy=publishedAt&apiKey=ce67ca95a69542b484f81bebf9ad36d5"
+    
+    // MARK: - requseting old articles was not part of free plan. Changed the date (year - 2023)
+    private let newsAPI = "https://newsapi.org/v2/everything?q=tesla&from=2023-11-11&sortBy=publishedAt&apiKey=ce67ca95a69542b484f81bebf9ad36d5"
     
     private var newsList = [News]()
 
@@ -28,7 +30,9 @@ final class DefaultNewsViewModel: NewsViewModel {
 
     // MARK: - Public Methods
     func viewDidLoad() {
-        //fetchNews()
+        
+        // MARK: - Fixed: the method "fetchNews" was commented out.
+        fetchNews()
     }
     
     // MARK: - Private Methods
@@ -36,8 +40,14 @@ final class DefaultNewsViewModel: NewsViewModel {
         NetworkManager.shared.get(url: newsAPI) { [weak self] (result: Result<Article, Error>) in
             switch result {
             case .success(let article):
-                self?.delegate?.newsFetched(newsList)
-                self?.newsList.append(article.articles)
+                
+                // MARK: - Fixed: we are getting a list of a news, so we need assignment insteed of appending.
+                // MARK: Fixed: at first shoud create articles.
+                self?.newsList = article.articles
+                
+                // MARK: - Fixed: inside closure we shoud use "self" explicitly and there was unwrapping needed.
+                self?.delegate?.newsFetched(self?.newsList ?? [])
+
             case .failure(let error):
                 self?.delegate?.showError(error)
             }
